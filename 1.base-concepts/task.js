@@ -24,7 +24,7 @@ function solveEquation(a, b, c) {
 
 function calculateTotalMortgage(percent, contribution, amount, date) {
   date = new Date();
-  let n = (date.getMilliseconds() - Date.now()) / 2678400000;
+  let n = ((Number(date.getMilliseconds()) - Date.now())) / 2678400000;
   let S = amount - contribution;
   let P = percent / 12 / 100;
   let monthPayment = S * (P + (P / ((Math.pow((1 + P), n)) - 1)));
