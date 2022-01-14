@@ -11,9 +11,8 @@ function cachingDecoratorNew(func) {
       let value = func(...args);
       if (cache.length > 5) {
         cache.shift();
-      } else {
-        cache.push({ hash, value });
       }
+      cache.push({ hash, value });
       console.log("Вычисляем: " + value);
       return "Вычисляем: " + value;
     }
@@ -24,6 +23,7 @@ function cachingDecoratorNew(func) {
 
 function debounceDecoratorNew(func, ms) {
   let nextCall = true;
+  let interval;
 
   function wrapper(...args) {
     if (nextCall) {
@@ -32,7 +32,7 @@ function debounceDecoratorNew(func, ms) {
       return;
     }
     clearTimeout(interval);
-    let interval = setTimeout(() => {
+    interval = setTimeout(() => {
       func.apply(this, ...args);
       nextCall = true;
     }, ms)
@@ -40,11 +40,13 @@ function debounceDecoratorNew(func, ms) {
   return wrapper;
 }
 
-function debounceDecorator2(debounceDecoratorNew) {
-  let count = 0;
+function debounceDecorator2(func) {
+  wrapper.count = 0;
+
   function wrapper(...args) {
-    wrapper.history = count++;
-    return debounceDecoratorNew.call(this, ...args);
+    wrapper.history.push(args);
+    wrapper.count++;
+    return func.call(this, ...args);
   }
   return wrapper;
 }
